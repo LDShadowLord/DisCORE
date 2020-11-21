@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>079b4ac8-00b9-4bee-952b-2585591b9105</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>DisCORE.py</StartupFile>
+    <StartupFile>test.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -12,6 +12,7 @@
     <Name>DisCORE</Name>
     <RootNamespace>DisCORE</RootNamespace>
     <InterpreterId>MSBuild|DisCore_Env_v1|$(MSBuildProjectFullPath)</InterpreterId>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +24,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DisCORE.py" />
+    <Compile Include="test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="DisCore_Env_v1\">
