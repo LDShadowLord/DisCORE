@@ -68,10 +68,11 @@ class Notify:
         """
         import dhooks
 
-        self.version = "0.5.1"
+        self.version = "0.5.2"
 
-        self.url = url
-        self.hook = dhooks.Webhook(url)
+        self._embedBase = dhooks.Embed
+        self.url = url.replace("discordapp.com","discord.com")
+        self._hook = dhooks.Webhook(url)
         self.debug = debug
 
     def author(self):
@@ -98,13 +99,13 @@ class Notify:
         The 'author' argument is for a dictionary of author arguments
         """
         if url == None:
-            exportEmbed = dhooks.Embed(
+            exportEmbed = self._embedBase(
                 description = description,
                 title = title,
                 color = color
             )
         else:
-            exportEmbed = dhooks.Embed(
+            exportEmbed = self._embedBase(
                 description = description,
                 title = title,
                 color = color,
@@ -133,11 +134,11 @@ class Notify:
         The 'catch' argument catches any errors when notifying without crashing the script
         """
         if catch != True:
-            self.hook.send(embed=embed)
+            self._hook.send(embed=embed)
             return True
         else:
             try:
-                self.hook.send(embed=embed)
+                self._hook.send(embed=embed)
                 return True
             except:
                 return False
