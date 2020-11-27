@@ -1,0 +1,14 @@
+##### DisCORE Requirements #####
+
+dhooks==1.1.4
+mysql-connector-python==8.0.22
+
+##### Example Requirements #####
+
+fuzzywuzzy			# HFY		RR
+praw				# Reddit	HFY
+beautifulsoup4		# Lit		RR
+html5lib			# Lit		RR
+urllib3				# RR
+fanficfare			# RR
+requests			# Lit
