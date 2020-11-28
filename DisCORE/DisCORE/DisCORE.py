@@ -1,3 +1,5 @@
+global_version = "0.6.2"
+
 class Logs:
     def __init__(self, url, name):
         """
@@ -7,7 +9,7 @@ class Logs:
         """
         import dhooks
 
-        self.version = "0.6.1"
+        self.version = global_version
 
         self.url = url.replace("discordapp.com","discord.com")
         self.name = name
@@ -75,7 +77,7 @@ class Notify:
         """
         import dhooks
 
-        self.version = "0.5.3"
+        self.version = global_version
 
         self._embedBase = dhooks.Embed
         self.url = url.replace("discordapp.com","discord.com")
