@@ -5,6 +5,7 @@
 
 # Specified Danger Files
 test.py
+test.json
 config.json
 
 # User-specific files

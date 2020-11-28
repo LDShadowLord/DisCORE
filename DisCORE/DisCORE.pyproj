@@ -24,6 +24,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DisCORE.py" />
+    <Compile Include="examples\DisCORE_UpdateChecker_HFY.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
@@ -39,6 +42,10 @@
     <Content Include="assets\logo.afdesign" />
     <Content Include="assets\logo.png" />
     <Content Include="assets\logo.svg" />
+    <Content Include="examples\config.json" />
+    <Content Include="examples\test.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
