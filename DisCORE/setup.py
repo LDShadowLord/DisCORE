@@ -1,11 +1,13 @@
 import setuptools
 
+version = "0.6.3"
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="DisCORE-LDShadowLord", # Replace with your own username
-    version="0.6.0",
+    version=version,
     author="LDShadowLord",
     author_email="ldshadowlord@gmail.com",
     description="A library of scripts for manipulating data and webhooks",

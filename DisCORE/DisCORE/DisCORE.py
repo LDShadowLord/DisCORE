@@ -1,4 +1,4 @@
-global_version = "0.6.2"
+global_version = "0.6.3"
 
 class Logs:
     def __init__(self, url, name):
