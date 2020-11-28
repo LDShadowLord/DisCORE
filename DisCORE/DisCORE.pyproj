@@ -50,6 +50,8 @@
     <Content Include="docs\assets\logo.afdesign" />
     <Content Include="docs\assets\logo.png" />
     <Content Include="docs\assets\logo.svg" />
+    <Content Include="docs\assets\logo_nobg.png" />
+    <Content Include="docs\assets\logo_nobg.svg" />
     <Content Include="docs\config.json" />
     <Content Include="docs\test.json">
       <SubType>Code</SubType>
