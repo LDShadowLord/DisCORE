@@ -1,5 +1,5 @@
 #Local Imports
-import DisCORE
+import pkg.DisCORE.DisCORE as DisCORE
 
 #External Imports
 import praw

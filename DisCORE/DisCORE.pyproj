@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>079b4ac8-00b9-4bee-952b-2585591b9105</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test.py</StartupFile>
+    <StartupFile>test\test.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,30 +23,41 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DisCORE.py" />
-    <Compile Include="examples\DisCORE_UpdateChecker_HFY.py">
+    <Compile Include="DisCORE\DisCORE.py" />
+    <Compile Include="docs\DisCORE_UpdateChecker_HFY.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test.py">
+    <None Include="LICENSE">
+      <SubType>Code</SubType>
+    </None>
+    <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__init__.py">
+    <Compile Include="test\test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DisCORE\__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\" />
-    <Folder Include="examples\" />
+    <Folder Include="docs\assets\" />
+    <Folder Include="docs\" />
+    <Folder Include="DisCORE\" />
+    <Folder Include="test\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\logo.afdesign" />
-    <Content Include="assets\logo.png" />
-    <Content Include="assets\logo.svg" />
-    <Content Include="examples\config.json" />
-    <Content Include="examples\test.json">
+    <Content Include="docs\assets\logo.afdesign" />
+    <Content Include="docs\assets\logo.png" />
+    <Content Include="docs\assets\logo.svg" />
+    <Content Include="docs\config.json" />
+    <Content Include="docs\test.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="requirements.txt" />
+    <Content Include="README.md">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="DisCORE-FattyEnvironment\">
