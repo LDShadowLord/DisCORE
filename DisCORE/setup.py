@@ -1,12 +1,12 @@
 import setuptools
 
-version = "0.6.3"
+version = "0.7.0"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="DisCORE-LDShadowLord", # Replace with your own username
+    name="DisCORE",
     version=version,
     author="LDShadowLord",
     author_email="ldshadowlord@gmail.com",
