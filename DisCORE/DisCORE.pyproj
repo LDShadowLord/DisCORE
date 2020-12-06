@@ -31,6 +31,7 @@
       <SubType>Code</SubType>
     </None>
     <Compile Include="docs\DisCORE_UpdateChecker_RR.py" />
+    <Compile Include="docs\DisCORE_UpdateChecker_LIT.py" />
     <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>
