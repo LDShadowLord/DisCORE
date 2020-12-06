@@ -30,6 +30,7 @@
     <None Include="LICENSE">
       <SubType>Code</SubType>
     </None>
+    <Compile Include="docs\DisCORE_UpdateChecker_RR.py" />
     <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>
@@ -44,6 +45,7 @@
     <Folder Include="docs\assets\" />
     <Folder Include="docs\" />
     <Folder Include="DisCORE\" />
+    <Folder Include="build\" />
     <Folder Include="test\" />
   </ItemGroup>
   <ItemGroup>
