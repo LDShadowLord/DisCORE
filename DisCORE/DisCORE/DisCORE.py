@@ -1,4 +1,4 @@
-global_version = "0.7.1"
+global_version = "0.7.2"
 
 class Logs:
     def __init__(self, url, name):
@@ -153,17 +153,21 @@ class Notify:
                 return False
 
 class Data_JSON:
-    def __init__(self, object=None, file=None):
+    def __init__(self, object=None, file=None, strip=None):
         """
         Create a DisCORE Data JSON Item
         The 'object' argument is the JSON object that is to be serialized
         The 'file' argument is a file path for either importing or exporting JSON to file
+        The 'strip' argument allows you to arbitrarily strip a character from the beginning and end of the object
         """
         import json
 
         if object == None and file == None:
             raise ValueError("Both cannot be None!")
-        self.object = object
+        if object != None and strip != None:
+            self.object = object.lstrip(strip).rstrip(strip).lstrip().rstrip()
+        else:
+            self.object = object
         self.file = file
         self._json = json
 
