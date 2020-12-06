@@ -6,6 +6,7 @@ mysql-connector-python==8.0.22
 ##### Example Requirements #####
 
 fuzzywuzzy			# HFY		RR
+python-Levenshtein  # HFY		RR		### Linux Only, Issues on Windows
 praw				# Reddit	HFY
 beautifulsoup4		# Lit		RR
 html5lib			# Lit		RR
