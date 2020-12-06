@@ -11,7 +11,7 @@ from fuzzywuzzy import process
 import DisCORE
 
 #Import config files
-config = DisCORE.Data_JSON(file="examples/config.json").load()
+config = DisCORE.Data_JSON(file="/data/global/config.json").load()
 
 #Set up DisCORE Logs for use
 d = DisCORE.Logs(url=config["log_url"], name="UpdateChecker HFY")
