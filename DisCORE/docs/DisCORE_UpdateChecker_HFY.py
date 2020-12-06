@@ -1,11 +1,14 @@
-#Local Imports
-import pkg.DisCORE.DisCORE as DisCORE
+#Add an additional PYTHONPATH area
+import sys
+sys.path.append('/data/packages/')
 
 #External Imports
 import praw
 import re
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+
+import DisCORE
 
 #Import config files
 config = DisCORE.Data_JSON(file="examples/config.json").load()
