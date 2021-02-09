@@ -142,7 +142,7 @@ has_changed = True
 for item in monitored.keys():
     #Check if this is a new entry to the DB, if it is then collect all information.
     #If not, collect only chapter information to speed up the process
-    if monitored[item]["fiction_url"] == None:
+    if monitored[item]["fiction_url"] == None or monitored[item]["is_active"] == None:
         is_new = True
         monitored[item]["fiction_url"] = "https://www.royalroad.com/fiction/"+item
         datum = RoyalRoad(url=monitored[item]["fiction_url"])
