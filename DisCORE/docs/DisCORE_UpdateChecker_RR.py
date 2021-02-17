@@ -185,7 +185,7 @@ for item in monitored.keys():
 
     #Check to see if new chapters have been added and go through the motions
     if datum.book_chapter_amount > monitored[item]["chapter_amount"]:
-        d.print("New Chapters Discovered")
+        d.print("[{datum}] - New Chapters Discovered".format(datum=datum.book_chapter_amount))
         has_changed = True
         for i in range(monitored[item]["chapter_amount"], datum.book_chapter_amount):
             datum_links.append("https://www.royalroad.com"+datum.book_chapters[i])
@@ -210,6 +210,7 @@ for item in monitored.keys():
             d.print(content="Notification Sent - "+monitored[item]["title"])
         
         monitored[item]["chapter_amount"] = datum.book_chapter_amount
+        monitored[item]["last_chapter_url"] = datum_links[-1]
 
         search_response = process.extractOne(monitored[item]["title"]+" - "+monitored[item]["author"], known_books, scorer=fuzz.token_sort_ratio)
         try:
@@ -220,13 +221,18 @@ for item in monitored.keys():
             d.print(content="Failed to Update Book Automatically")
 
     #If there has been a database issue (unlikely), fix it and continue.
+    #Discovered that if chapters are manually deleted (Damn you Kindle Unlimited) it triggers this.
     elif datum.book_chapter_amount < monitored[item]["chapter_amount"]:
-        d.print("Discovered chapter issue. Resolving.")
-        monitored[item]["chapters"] = datum.book_chapter_amount
+        d.print("[{datum}] < [{item}] - Discovered chapter issue. Resolving.".format(datum=datum.book_chapter_amount, item=monitored[item]["chapter_amount"]))
+        monitored[item]["chapter_amount"] = datum.book_chapter_amount
         has_changed = True
 
+        if monitored[item]["last_chapter_url"] != datum.book_chapters[-1]:
+            d.print("[WARN] Last Chapter Changed - Potential Database Issue")
+            notify.notify(embed=notify.embed("Potential Database Issue. Please Check Logs.","[WARN] UpdateChecker_RR"))
+
     else:
-        d.print("No New Chapters")
+        d.print("[{item}] - No New Chapters".format(item=monitored[item]["chapter_amount"]))
 
 #Push to the database
 if has_changed == True:
