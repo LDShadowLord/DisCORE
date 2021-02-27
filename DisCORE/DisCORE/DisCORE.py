@@ -1,4 +1,4 @@
-global_version = "0.8.0"
+global_version = "0.8.1"
 print("DisCORE Imported Succesfully")
 
 class Logs:
