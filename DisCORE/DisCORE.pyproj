@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>DisCORE</Name>
     <RootNamespace>DisCORE</RootNamespace>
-    <InterpreterId>MSBuild|DisCORE-FattyEnvironment|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|FatEnvironment_3_9|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
   </PropertyGroup>
@@ -66,10 +66,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="DisCORE-FattyEnvironment\">
-      <Id>DisCORE-FattyEnvironment</Id>
-      <Version>3.8</Version>
-      <Description>DisCORE-FattyEnvironment (Python 3.8 (64-bit))</Description>
+    <Interpreter Include="FatEnvironment_3_9\">
+      <Id>FatEnvironment_3_9</Id>
+      <Version>3.9</Version>
+      <Description>FatEnvironment_3_9 (Python 3.9 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
