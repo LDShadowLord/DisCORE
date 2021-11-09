@@ -50,10 +50,12 @@ for item in monitored.keys():
     if monitored[item]["fiction_url"] == None or monitored[item]["is_active"] == None:
         is_new = True
         if provider == "RoyalRoad":
-            monitored[item]["fiction_url"] = "https://www.royalroad.com/fiction/"+monitored[item]["fiction_id"]
+            if not monitored[item]["fiction_url"]:
+                monitored[item]["fiction_url"] = "https://www.royalroad.com/fiction/"+monitored[item]["fiction_id"]
             datum = ClassDef.RoyalRoad(url=monitored[item]["fiction_url"])
         elif provider == "ScribbleHub":
-            monitored[item]["fiction_url"] = "https://www.scribblehub.com/series/"+monitored[item]["fiction_id"]
+            if not monitored[item]["fiction_url"]:
+                monitored[item]["fiction_url"] = "https://www.scribblehub.com/series/"+monitored[item]["fiction_id"]
             datum = ClassDef.ScribbleHub(url=monitored[item]["fiction_url"])
         if monitored[item]["chapter_amount"] == None:
             monitored[item]["chapter_amount"] = 0
