@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>079b4ac8-00b9-4bee-952b-2585591b9105</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test\test.py</StartupFile>
+    <StartupFile>docs\UpdateCheckerClassDef.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -31,6 +31,7 @@
     <None Include="LICENSE">
       <SubType>Code</SubType>
     </None>
+    <Compile Include="docs\UpdateCheckerClassDef.py" />
     <Compile Include="docs\DisCORE_UpdateChecker_RR.py" />
     <Compile Include="docs\DisCORE_UpdateChecker_LIT.py" />
     <Compile Include="setup.py">

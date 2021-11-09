@@ -5,107 +5,11 @@ sys.path.append('/data/packages/')
 #External Imports
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from bs4 import BeautifulSoup
-import urllib3
 import os
 from subprocess import check_output, STDOUT, call, PIPE
 
 from DisCORE import DisCORE
-
-#Custom RoyalRoad class, based on a script I found that was non-functioning.
-#Not sure whose work this was originally, but it's not mine. I just made it work in Python 3.
-#Raise an issue if you made this originally so I can add credit to this file.
-class RoyalRoad:
-    def __init__(self, url=None, is_chapter=False, only_chapter_info=False):
-        """
-        Scans a RoyalRoad Book or Chapter to Gather Information which is exposed in class variables beginning either 'fiction_' or 'book_' dependant on namespace
-        'url' should be a Fully Qualified RoyalRoad URL
-        'is_chapter' is a boolean that only returns 'fiction' data when 'True'
-        """
-        self.local_is_chapter = is_chapter
-
-        self.fiction_url = url
-        self.fiction_id = None
-        self.fiction_title = None
-        self.fiction_author = None
-        self.fiction_author_id = None
-
-        self.book_stats = None
-        self.book_chapters = None
-        self.book_chapter_amount = None
-        self.book_description = None
-        self.book_genres = [None]
-        self.book_cover_image = None
-        self.book_is_active = None
-
-        soup = BeautifulSoup(urllib3.PoolManager().request('GET', url).data, "html5lib")
-
-        if only_chapter_info:
-            self.chapters(soup)
-        elif is_chapter:
-            self.fiction(soup)
-        elif not is_chapter:
-            self.fiction(soup)
-            self.book(soup)
-
-    def author(self, soup):
-        author = soup.find('span', attrs={'property': 'name'})
-        
-        if author == None:
-            author = soup.find('h3', attrs={'class': 'font-white inline-block'}).text
-        else:
-            author = author.text
-        if author == "":
-            author = None
-
-        if author == None:
-            return [None, None]
-        else:
-            new_soup = BeautifulSoup(urllib3.PoolManager().request('GET', "https://www.royalroad.com/user/memberlist?q="+str(author.replace(" ","+"))).data, "html5lib")
-            try:
-                author_id = int(new_soup.find("tbody").find("tr").find("td").find("a").get("href").split("/")[2])
-            except:
-                author_id = None
-
-            return [author.strip(), author_id]
-
-    def fiction(self, soup):
-        self.fiction_id = (self.fiction_url).strip("https://www.royalroad.com/fiction/").split("/")[0]
-        self.fiction_title = soup.find('h1', attrs={'class': 'font-white'}).text.strip()
-        author = self.author(soup)
-        self.fiction_author = author[0]
-        self.fiction_author_id = author[1]
-
-    def book(self, soup):
-
-        self.chapters(soup)
-
-        self.book_stats = [
-            stat.text.strip() for stat in soup.findAll('li', attrs={'class': 'bold uppercase font-red-sunglo'})
-            ][:6]
-
-        if not soup.find('div', attrs={'class': 'number font-red-sunglo'}):
-            self.book_is_active = True
-        else:
-            self.book_is_active = False
-
-        self.book_description = soup.find('div', attrs={'property': 'description'}).text.strip()
-
-        self.book_cover_image = soup.find('img', attrs={'property': 'image'}).get('src')
-        if self.book_cover_image == "undefined":
-            self.book_cover_image = "/content/images/nocover-new-min.png"
-
-        for tag in soup.findAll('span', attrs={'class': 'label label-default label-sm bg-blue-hoki'}):
-            self.book_genres.append(tag.text.strip())
-        for tag in soup.findAll('span', attrs={'property': 'genre'}):
-            self.book_genres.append(tag.text.strip())
-
-    def chapters(self, soup):
-        self.book_chapters = [
-            tag.get("data-url") for tag in soup.findAll('tr', attrs={'style': 'cursor: pointer'})
-            ]
-
-        self.book_chapter_amount = len(self.book_chapters)
+from UCClassDef import ClassDef
 
 #Import config files
 config = DisCORE.Data_JSON(file="/data/global/config.json").load()
@@ -136,31 +40,39 @@ for dirname, dirnames, filenames in os.walk("/books"):
       pass
 
 #Begin to Iterate through current items
-#If this code looks weird, it's ported from another project and modified for use.
 has_changed = True
 
 for item in monitored.keys():
+    provider = monitored[item]["fiction_provider"]
+
     #Check if this is a new entry to the DB, if it is then collect all information.
     #If not, collect only chapter information to speed up the process
     if monitored[item]["fiction_url"] == None or monitored[item]["is_active"] == None:
         is_new = True
-        monitored[item]["fiction_url"] = "https://www.royalroad.com/fiction/"+item
-        datum = RoyalRoad(url=monitored[item]["fiction_url"])
-        d.print("Checking "+datum.fiction_title)
+        if provider == "RoyalRoad":
+            monitored[item]["fiction_url"] = "https://www.royalroad.com/fiction/"+monitored[item]["fiction_id"]
+            datum = ClassDef.RoyalRoad(url=monitored[item]["fiction_url"])
+        elif provider == "ScribbleHub":
+            monitored[item]["fiction_url"] = "https://www.scribblehub.com/series/"+monitored[item]["fiction_id"]
+            datum = ClassDef.ScribbleHub(url=monitored[item]["fiction_url"])
         if monitored[item]["chapter_amount"] == None:
             monitored[item]["chapter_amount"] = 0
+        d.print("Checking "+datum.fiction_title)
     else:
         is_new = False
-        datum = RoyalRoad(url=monitored[item]["fiction_url"], only_chapter_info=True)
+        if provider == "RoyalRoad":
+            datum = ClassDef.RoyalRoad(url=monitored[item]["fiction_url"], only_chapter_info=True)
+        elif provider == "ScribbleHub":
+            datum = ClassDef.ScribbleHub(url=monitored[item]["fiction_url"], only_chapter_info=True)
         d.print("Checking "+monitored[item]["title"])
 
     datum_links = []
 
-    #If new, put all information into the DB and notify that a new book has been added. Else, carry on.
+    #If new, put all information into the DB and notify that a new book has been added. Else, carry on. Notifications are seperated so that things are colourcoded. A E S T H E T I C S.
     if is_new:
         monitored[item]["title"] = datum.fiction_title
         monitored[item]["author"] = datum.fiction_author
-        monitored[item]["author_url"] = "https://www.royalroad.com/profile/"+str(datum.fiction_author_id)
+        monitored[item]["author_url"] = datum.fiction_author_url
         monitored[item]["cover_image"] = datum.book_cover_image
         monitored[item]["is_active"] = datum.book_is_active
 
@@ -169,13 +81,23 @@ for item in monitored.keys():
             "icon":"https://i0.wp.com/uniquesportsplus.com/wp-content/uploads/2019/01/author-icon.png?fit=512%2C512&ssl=1&w=640",
             "url":monitored[item]["author_url"]
         }
-        embed = notify.embed(
-            description="A New Book Has Been Set for Notifications",
-            title=monitored[item]["title"],
-            url=monitored[item]["fiction_url"],
-            color=0xada638,
-            thumbnail=monitored[item]["cover_image"],
-            author=author
+        if provider == "RoyalRoad":
+            embed = notify.embed(
+                description="A New Book Has Been Set for Notifications",
+                title=monitored[item]["title"],
+                url=monitored[item]["fiction_url"],
+                color=0xada638,
+                thumbnail=monitored[item]["cover_image"],
+                author=author
+            )
+        elif provider == "ScribbleHub":
+            embed = notify.embed(
+                description="A New Book Has Been Set for Notifications",
+                title=monitored[item]["title"],
+                url=monitored[item]["fiction_url"],
+                color=0x185886,
+                thumbnail=monitored[item]["cover_image"],
+                author=author
             )
         notify.notify(embed=embed)
 
@@ -184,28 +106,49 @@ for item in monitored.keys():
         pass
 
     #Check to see if new chapters have been added and go through the motions
-    if datum.book_chapter_amount > monitored[item]["chapter_amount"]:
-        d.print("[{datum}] - New Chapters Discovered".format(datum=datum.book_chapter_amount))
-        has_changed = True
-        for i in range(monitored[item]["chapter_amount"], datum.book_chapter_amount):
-            datum_links.append("https://www.royalroad.com"+datum.book_chapters[i])
+    #Also checks to see if the last chapter has been changed (fixes an edge case scenario where a chapter is deleted and a new one immediately uploaded)
+    if datum.book_chapter_amount > monitored[item]["chapter_amount"] or monitored[item]["last_chapter_url"] != datum.book_chapters[-1]:
+        is_lcm = False
+        if datum.book_chapter_amount > monitored[item]["chapter_amount"]:
+            d.print("[{datum}] - New Chapters Discovered".format(datum=datum.book_chapter_amount))
+            has_changed = True
+            for i in range(monitored[item]["chapter_amount"], datum.book_chapter_amount):
+                datum_links.append(datum.book_chapters[i])
+        elif monitored[item]["last_chapter_url"] != datum.book_chapters[-1]:
+            d.print("[{datum}] - New Chapters Discovered (LCM)".format(datum=datum.book_chapter_amount))
+            is_lcm = True
+            has_changed = True
+            datum_links.append(datum.book_chapters[-1])
 
         #Send a notification for every new chapter
         for y in range(0, len(datum_links)):
-            chapter_datum = RoyalRoad(url=datum_links[y],is_chapter=True)
             author = {
                 "name":monitored[item]["author"],
                 "icon":"https://i0.wp.com/uniquesportsplus.com/wp-content/uploads/2019/01/author-icon.png?fit=512%2C512&ssl=1&w=640",
                 "url":monitored[item]["author_url"]
             }
-            embed = notify.embed(
-                description="An Update For **"+monitored[item]["title"]+"** Has Been Posted",
-                title=chapter_datum.fiction_title,
-                url=datum_links[y],
-                color=0xada638,
-                thumbnail=monitored[item]["cover_image"],
-                author=author
-                )
+            if provider == "RoyalRoad":
+                chapter_datum = ClassDef.RoyalRoad(url=datum_links[y],is_chapter=True)
+                embed = notify.embed(
+                    description="An Update For **"+monitored[item]["title"]+"** Has Been Posted",
+                    title=chapter_datum.fiction_title,
+                    url=datum_links[y],
+                    color=0xada638,
+                    thumbnail=monitored[item]["cover_image"],
+                    author=author
+                    )
+            elif provider == "ScribbleHub": 
+                chapter_datum = ClassDef.ScribbleHub(url=datum_links[y],is_chapter=True)
+                embed = notify.embed(
+                    description="An Update For **"+monitored[item]["title"]+"** Has Been Posted",
+                    title=chapter_datum.fiction_title,
+                    url=datum_links[y],
+                    color=0x185886,
+                    thumbnail=monitored[item]["cover_image"],
+                    author=author
+                    )
+            if is_lcm:
+                embed.add_field("LastChapterModified","An LCM Warning has been generated for this notification.",False)
             notify.notify(embed=embed)
             d.print(content="Notification Sent - "+monitored[item]["title"])
         
